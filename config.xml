@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.militaryforce.game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Mobile Military Force</name>
+    <description>Intense online FPS action game with wave-based combat</description>
+    <author email="dev@militaryforce.com" href="https://github.com/korede747">
+        korede747
+    </author>
+
+    <!-- Platform-specific settings -->
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon density="ldpi" src="assets/icon-36.png" />
+        <icon density="mdpi" src="assets/icon-48.png" />
+        <icon density="hdpi" src="assets/icon-72.png" />
+        <icon density="xhdpi" src="assets/icon-96.png" />
+        <icon density="xxhdpi" src="assets/icon-144.png" />
+        <icon density="xxxhdpi" src="assets/icon-192.png" />
+        <splash density="land-ldpi" src="assets/splash-320x426.png" />
+        <splash density="land-mdpi" src="assets/splash-320x470.png" />
+        <splash density="land-hdpi" src="assets/splash-480x640.png" />
+        <splash density="land-xhdpi" src="assets/splash-720x960.png" />
+        <preference name="Orientation" value="portrait" />
+        <preference name="FullScreen" value="true" />
+    </platform>
+
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <icon height="29" platform="ios" src="assets/icon-29.png" width="29" />
+        <icon height="50" platform="ios" src="assets/icon-50.png" width="50" />
+        <icon height="57" platform="ios" src="assets/icon-57.png" width="57" />
+        <icon height="58" platform="ios" src="assets/icon-58.png" width="58" />
+        <icon height="72" platform="ios" src="assets/icon-72.png" width="72" />
+        <icon height="114" platform="ios" src="assets/icon-114.png" width="114" />
+        <icon height="120" platform="ios" src="assets/icon-120.png" width="120" />
+        <icon height="144" platform="ios" src="assets/icon-144.png" width="144" />
+        <icon height="152" platform="ios" src="assets/icon-152.png" width="152" />
+        <icon height="167" platform="ios" src="assets/icon-167.png" width="167" />
+        <icon height="180" platform="ios" src="assets/icon-180.png" width="180" />
+        <splash height="1024" platform="ios" src="assets/splash-1024x768.png" width="768" />
+        <splash height="960" platform="ios" src="assets/splash-960x640.png" width="640" />
+        <splash height="1136" platform="ios" src="assets/splash-1136x640.png" width="640" />
+        <splash height="1334" platform="ios" src="assets/splash-1334x750.png" width="750" />
+        <splash height="2208" platform="ios" src="assets/splash-2208x1242.png" width="1242" />
+        <preference name="Orientation" value="portrait" />
+    </platform>
+
+    <platform name="windows">
+        <icon height="70" platform="windows" src="assets/icon-70.png" width="70" />
+        <icon height="150" platform="windows" src="assets/icon-150.png" width="150" />
+        <icon height="310" platform="windows" src="assets/icon-310.png" width="310" />
+        <splash height="1920" platform="windows" src="assets/splash-1920x1200.png" width="1200" />
+    </platform>
+
+    <!-- General settings -->
+    <preference name="Orientation" value="portrait" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="StatusBarBackgroundColor" value="#ff6600" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+
+    <!-- Access origin for www and CDN -->
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <!-- Plugin definitions -->
+    <plugin name="cordova-plugin-device" spec="~2.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.4.2" />
+
+    <!-- Content Security Policy -->
+    <meta-content-security-policy 
+        content="default-src 'self' data: gap: 'unsafe-inline' 'unsafe-eval' *; 
+        style-src 'self' 'unsafe-inline' *; 
+        media-src *;" />
+</widget>
