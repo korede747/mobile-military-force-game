@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Military Force - Visual Game Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6600;
+            margin-bottom: 30px;
+            font-size: 36px;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .preview-box {
+            border: 2px solid #ff6600;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #0a0a0a;
+        }
+
+        .preview-title {
+            background: #ff6600;
+            color: #000;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .preview-content {
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Menu Screen */
+        .menu-screen {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .menu-title {
+            font-size: 48px;
+            color: #ff6600;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .menu-subtitle {
+            font-size: 18px;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #ff6600;
+            color: #000;
+            padding: 12px 30px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #ffaa44;
+            transform: scale(1.05);
+        }
+
+        /* Gameplay Screen */
+        .gameplay-screen {
+            background: #0a0a0a;
+            position: relative;
+            height: 450px;
+        }
+
+        .game-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 102, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 102, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .game-hud {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            color: #ff6600;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .game-element {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player {
+            width: 30px;
+            height: 40px;
+            background: #00ff00;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+        }
+
+        .player::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 8px;
+            background: #666;
+            right: -18px;
+            border-radius: 3px;
+        }
+
+        .enemy {
+            width: 25px;
+            height: 35px;
+            background: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+        }
+
+        .enemy-eyes {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffff00;
+            border-radius: 50%;
+        }
+
+        .enemy1 {
+            left: 15%;
+            top: 15%;
+        }
+
+        .enemy2 {
+            right: 12%;
+            top: 25%;
+        }
+
+        .enemy3 {
+            left: 25%;
+            bottom: 15%;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            background: #ffff00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 0, 0.8);
+        }
+
+        .bullet1 {
+            left: 48%;
+            top: 45%;
+        }
+
+        .bullet2 {
+            right: 18%;
+            top: 42%;
+        }
+
+        .crosshair {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        .crosshair::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            width: 2px;
+            height: 10px;
+            background: #ff6600;
+            transform: translateX(-50%);
+        }
+
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -15px;
+            height: 2px;
+            width: 10px;
+            background: #ff6600;
+            transform: translateY(-50%);
+        }
+
+        /* Game Over Screen */
+        .gameover-screen {
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ff6600;
+        }
+
+        .gameover-title {
+            color: #ff6600;
+            font-size: 56px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+        }
+
+        .gameover-stat {
+            font-size: 20px;
+            margin: 15px 0;
+            color: #ccc;
+        }
+
+        .stat-value {
+            color: #ffff00;
+            font-weight: bold;
+        }
+
+        /* Feature Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: #222;
+            border-left: 4px solid #ff6600;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            color: #ff6600;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .code-section {
+            background: #1a1a1a;
+            border: 1px solid #ff6600;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .code-title {
+            color: #ff6600;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #00ff00;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: #222;
+            border-left: 3px solid #ff6600;
+            padding: 15px;
+        }
+
+        .stat-label {
+            color: #ff6600;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-value-box {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-title {
+                font-size: 32px;
+            }
+
+            .gameover-title {
+                font-size: 36px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Mobile Military Force - Game Visual Preview</h1>
+
+        <!-- Three Main Screens -->
+        <div class="preview-grid">
+            <!-- Menu Screen -->
+            <div class="preview-box">
+                <div class="preview-title">📋 MAIN MENU SCREEN</div>
+                <div class="preview-content menu-screen">
+                    <div class="menu-title">Mobile<br>Military Force</div>
+                    <div class="menu-subtitle">Online FPS Action Game</div>
+                    <button class="btn">PLAY NOW</button>
+                    <button class="btn">INSTRUCTIONS</button>
+                </div>
+            </div>
+
+            <!-- Gameplay Screen -->
+            <div class="preview-box">
+                <div class="preview-title">🎯 GAMEPLAY SCREEN</div>
+                <div class="preview-content gameplay-screen">
+                    <div class="game-grid"></div>
+                    
+                    <div class="game-hud">
+                        <div>Score: <span style="color: #ffff00;">2500</span> | Health: <span style="color: #00ff00;">75%</span> | Ammo: <span style="color: #ffff00;">18</span></div>
+                        <div>Wave: <span style="color: #ffff00;">3</span> | Enemies: <span style="color: #ff3333;">5</span></div>
+                    </div>
+
+                    <!-- Player -->
+                    <div class="game-element player"></div>
+
+                    <!-- Enemies -->
+                    <div class="game-element enemy enemy1">
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; left: 5px; top: 8px;"></span>
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; right: 5px; top: 8px;"></span>
+                    </div>
+                    <div class="game-element enemy enemy2">
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; left: 5px; top: 8px;"></span>
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; right: 5px; top: 8px;"></span>
+                    </div>
+                    <div class="game-element enemy enemy3">
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; left: 5px; top: 8px;"></span>
+                        <span style="position: absolute; width: 4px; height: 4px; background: #ffff00; border-radius: 50%; right: 5px; top: 8px;"></span>
+                    </div>
+
+                    <!-- Bullets -->
+                    <div class="game-element bullet bullet1"></div>
+                    <div class="game-element bullet bullet2"></div>
+
+                    <!-- Crosshair -->
+                    <div class="crosshair"></div>
+                </div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div class="preview-box">
+                <div class="preview-title">☠️ GAME OVER SCREEN</div>
+                <div class="preview-content gameover-screen">
+                    <div class="gameover-title">GAME OVER</div>
+                    <div class="gameover-stat">Final Score: <span class="stat-value">5250</span></div>
+                    <div class="gameover-stat">Enemies Defeated: <span class="stat-value">28</span></div>
+                    <button class="btn" style="margin-top: 20px;">PLAY AGAIN</button>
+                </div>
+            </div>
+
+            <!-- Controls Info -->
+            <div class="preview-box">
+                <div class="preview-title">🎮 GAME CONTROLS</div>
+                <div class="preview-content" style="background: #222;">
+                    <div style="text-align: left; width: 100%;">
+                        <div style="margin: 15px 0; border-left: 3px solid #ff6600; padding-left: 15px;">
+                            <div style="color: #ff6600; font-weight: bold;">⬆️⬅️⬇️➡️ WASD Keys</div>
+                            <div style="color: #ccc; font-size: 14px;">Move player around arena</div>
+                        </div>
+                        <div style="margin: 15px 0; border-left: 3px solid #ff6600; padding-left: 15px;">
+                            <div style="color: #ff6600; font-weight: bold;">🖱️ Mouse Movement</div>
+                            <div style="color: #ccc; font-size: 14px;">Aim at enemies</div>
+                        </div>
+                        <div style="margin: 15px 0; border-left: 3px solid #ff6600; padding-left: 15px;">
+                            <div style="color: #ff6600; font-weight: bold;">💥 Click Mouse</div>
+                            <div style="color: #ccc; font-size: 14px;">Shoot bullets at enemies</div>
+                        </div>
+                        <div style="margin: 15px 0; border-left: 3px solid #ff6600; padding-left: 15px;">
+                            <div style="color: #ff6600; font-weight: bold;">🔫 Press R</div>
+                            <div style="color: #ccc; font-size: 14px;">Reload ammo magazine</div>
+                        </div>
+                        <div style="margin: 15px 0; border-left: 3px solid #ff6600; padding-left: 15px;">
+                            <div style="color: #ff6600; font-weight: bold;">⚡ Shift Key</div>
+                            <div style="color: #ccc; font-size: 14px;">Run faster (1.5x speed)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🌊</div>
+                <div class="feature-title">5 Wave Levels</div>
+                <div class="feature-desc">
+                    Progressive difficulty:<br>
+                    Wave 1: 3 enemies<br>
+                    Wave 2: 5 enemies<br>
+                    Wave 3: 7 enemies<br>
+                    Wave 4: 9 enemies<br>
+                    Wave 5: 11 enemies
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-title">Smart Enemy AI</div>
+                <div class="feature-desc">
+                    Enemies target the player<br>
+                    Chase you around the arena<br>
+                    Deal 1 HP damage on contact<br>
+                    Get faster each wave
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💛</div>
+                <div class="feature-title">Bullet System</div>
+                <div class="feature-desc">
+                    Yellow bullets with trail<br>
+                    Each hit: 25 damage<br>
+                    Reload to get 30 rounds<br>
+                    Ammo management required
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">❤️</div>
+                <div class="feature-title">Health System</div>
+                <div class="feature-desc">
+                    Start with 100 HP<br>
+                    Health bar above player<br>
+                    Green → Yellow → Red<br>
+                    Game over at 0 HP
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <div class="feature-title">Score Tracking</div>
+                <div class="feature-desc">
+                    100 points per enemy kill<br>
+                    Real-time score updates<br>
+                    Track your best scores<br>
+                    Compete with friends
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Visual Design</div>
+                <div class="feature-desc">
+                    Dark military theme<br>
+                    Orange & green accents<br>
+                    Sci-fi grid background<br>
+                    Smooth 60 FPS gameplay
+                </div>
+            </div>
+
+            <div class="feature-card full-width">
+                <div class="feature-icon">💻</div>
+                <div class="feature-title">Cross-Platform Compatible</div>
+                <div class="feature-desc">
+                    ✅ Windows Desktop | ✅ Mac Desktop | ✅ Linux Desktop | ✅ Chrome Browser | ✅ Firefox | ✅ Safari | ✅ Android Phone | ✅ iPhone | ✅ Tablet
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Statistics -->
+        <div class="code-section">
+            <div class="code-title">📊 Game Statistics & Mechanics</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Player Stats</div>
+                    <div class="stat-value-box">
+                        Health: 100 HP<br>
+                        Speed: 5 units/frame<br>
+                        Run Speed: 7.5 units/frame<br>
+                        Max Ammo: 30 rounds<br>
+                        Reload Speed: Instant
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Enemy Stats</div>
+                    <div class="stat-value-box">
+                        Health: 50 HP<br>
+                        Damage: 1 HP/frame on contact<br>
+                        Base Speed: 2 units/frame<br>
+                        Speed Boost: +0.5 per wave<br>
+                        AI: Targets player
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Bullet Stats</div>
+                    <div class="stat-value-box">
+                        Damage: 25 HP per hit<br>
+                        Speed: 8 units/frame<br>
+                        Size: 3px radius<br>
+                        Fire Rate: Unlimited<br>
+                        Visual: Yellow glow
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Scoring System</div>
+                    <div class="stat-value-box">
+                        Enemy Kill: +100 points<br>
+                        Wave Complete: Bonus<br>
+                        Max Waves: 5<br>
+                        Max Score: Unlimited<br>
+                        Death Penalty: -0
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Overview -->
+        <div class="code-section">
+            <div class="code-title">💻 Code Structure Overview</div>
+            <div class="code-block">
+// Game Engine - HTML5 Canvas
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Player Object
+let player = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    health: 100,
+    speed: 5,
+    angle: 0
+};
+
+// Game Arrays
+let bullets = [];    // All active bullets
+let enemies = [];    // All active enemies
+let score = 0;       // Current score
+
+// Main Game Loop
+function gameLoop() {
+    update();        // Update game state
+    draw();          // Draw graphics
+    requestAnimationFrame(gameLoop);
+}
+
+// Classes Used
+class Enemy {
+    constructor(x, y) { /* AI targeting logic */ }
+    update() { /* Chase player */ }
+    draw() { /* Render enemy */ }
+}
+
+class Bullet {
+    constructor(x, y, angle) { /* Bullet creation */ }
+    update() { /* Move bullet */ }
+    draw() { /* Render bullet trail */ }
+}
+            </div>
+        </div>
+
+        <!-- How to Play -->
+        <div class="code-section">
+            <div class="code-title">🎮 How to Play - Step by Step</div>
+            <div style="color: #ccc; line-height: 2;">
+                <div style="margin: 15px 0; padding-left: 20px; border-left: 3px solid #ff6600;">
+                    <strong style="color: #ff6600;">Step 1: Start Game</strong> - Click "PLAY NOW" button from menu
+                </div>
+                <div style="margin: 15px 0; padding-left: 20px; border-left: 3px solid #ff6600;">
+                    <strong style="color: #ff6600;">Step 2: Eliminate Wave 1</strong> - Kill 3 enemies using WASD to move and mouse to aim/click to shoot
+                </div>
+                <div style="margin: 15px 0; padding-left: 20px; border-left: 3px solid #ff6600;">
+                    <strong style="color: #ff6600;">Step 3: Manage Resources</strong> - Keep health up, press R to reload when ammo runs out
+                </div>
+                <div style="margin: 15px 0; padding-left: 20px; border-left: 3px solid #ff6600;">
+                    <strong style="color: #ff6600;">Step 4: Progress Waves</strong> - Complete all 5 waves with increasing difficulty to win
+                </div>
+                <div style="margin: 15px 0; padding-left: 20px; border-left: 3px solid #ff6600;">
+                    <strong style="color: #ff6600;">Step 5: Track Score</strong> - Each enemy = 100 points. Try to get highest score possible
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="code-section" style="background: linear-gradient(135deg, #ff6600 0%, #ffaa44 100%); text-align: center;">
+            <div style="color: #000; font-size: 24px; font-weight: bold; margin: 20px 0;">
+                🚀 Ready to Play This Game?
+            </div>
+            <div style="color: #000; font-size: 16px; margin: 20px 0;">
+                The game is fully functional and ready to play online RIGHT NOW!
+            </div>
+            <a href="https://korede747.github.io/mobile-military-force-game/" 
+               style="background-color: #000; color: #ff6600; padding: 15px 40px; text-decoration: none; 
+                      font-weight: bold; border-radius: 5px; display: inline-block; font-size: 18px; margin: 10px;">
+                ► PLAY GAME NOW
+            </a>
+            <div style="color: #000; font-size: 14px; margin-top: 15px;">
+                No download needed. Play instantly in your browser!
+            </div>
+        </div>
+    </div>
+</body>
+</html>
